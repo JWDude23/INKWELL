@@ -35,8 +35,8 @@ class _NewGameScreenState extends State<NewGameScreen> {
           Slider(
             value: playerCount.toDouble(),
             min: 2,
-            max: 8,
-            divisions: 6,
+            max: 4,
+            divisions: 2,
             label: "$playerCount",
             onChanged: (value) {
               setState(() {
