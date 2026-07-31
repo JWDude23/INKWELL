@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../../../shared/theme/ink_colors.dart';
-import 'ink_selector.dart';
+import '../../../shared/widgets/ink_gem.dart';
+import 'identity_picker.dart';
+
 
 
 class PlayerCard extends StatelessWidget {
+
 
   const PlayerCard({
 
@@ -23,6 +26,7 @@ class PlayerCard extends StatelessWidget {
   });
 
 
+
   final int playerNumber;
 
   final String name;
@@ -35,26 +39,103 @@ class PlayerCard extends StatelessWidget {
 
 
 
+
+  void showPicker(BuildContext context){
+
+    showModalBottomSheet(
+
+      context: context,
+
+      builder: (_) {
+
+        return IdentityPicker(
+
+          current:
+              ink,
+
+          onSelected:
+              onInkChanged,
+
+        );
+
+      },
+
+    );
+
+  }
+
+
+
+
+
   @override
-  Widget build(BuildContext context) {
+Widget build(BuildContext context) {
+
+  return GestureDetector(
+
+    onTap: () {
+      showPicker(context);
+    },
 
 
-    return Card(
+    child: Card(
 
       elevation: 6,
+
+
+      shape: RoundedRectangleBorder(
+
+        borderRadius:
+            BorderRadius.circular(20),
+
+
+        side: BorderSide(
+
+          color:
+              InkColors.get(ink),
+
+          width:
+              3,
+
+        ),
+
+      ),
+
 
       child: Padding(
 
         padding:
-            const EdgeInsets.all(16),
+            const EdgeInsets.all(6),
+
 
         child: Column(
 
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          mainAxisAlignment:
+              MainAxisAlignment.center,
+
+
+          mainAxisSize:
+              MainAxisSize.min,
 
 
           children: [
+
+
+            InkGem(
+
+              type:
+                  ink,
+
+              size:
+                  42,
+
+            ),
+
+
+            const SizedBox(
+              height: 2,
+            ),
+
 
 
             Text(
@@ -62,60 +143,80 @@ class PlayerCard extends StatelessWidget {
               "Player $playerNumber",
 
               style:
-                  Theme.of(context)
-                  .textTheme
-                  .titleLarge,
+                  const TextStyle(
 
-            ),
+                    fontWeight:
+                        FontWeight.bold,
 
-
-            const SizedBox(height: 12),
-
-
-            TextField(
-
-              controller:
-                  TextEditingController(
-                    text: name,
-                  ),
-
-              decoration:
-                  const InputDecoration(
-
-                    labelText:
-                        "Name",
-
-                    border:
-                        OutlineInputBorder(),
+                    fontSize:
+                        14,
 
                   ),
 
+            ),
 
-              onChanged:
-                  onNameChanged,
+
+
+            SizedBox(
+
+              height:
+                  32,
+
+
+              child:
+                  TextField(
+
+                    textAlign:
+                        TextAlign.center,
+
+
+                    style:
+                        const TextStyle(
+
+                          fontSize:
+                              13,
+
+                        ),
+
+
+                    decoration:
+                        InputDecoration(
+
+                          hintText:
+                              name,
+
+                          isDense:
+                              true,
+
+
+                          contentPadding:
+                              EdgeInsets.zero,
+
+
+                          border:
+                              InputBorder.none,
+
+                        ),
+
+
+                    onChanged:
+                        onNameChanged,
+
+                  ),
 
             ),
 
 
-            const SizedBox(height: 16),
 
+            const Icon(
 
-            const Text(
-              "Identity",
-            ),
+              Icons.palette_outlined,
 
-
-            const SizedBox(height: 8),
-
-
-            InkSelector(
-
-              selected: ink,
-
-              onSelected:
-                  onInkChanged,
+              size:
+                  14,
 
             ),
+
 
           ],
 
@@ -123,8 +224,9 @@ class PlayerCard extends StatelessWidget {
 
       ),
 
-    );
+    ),
 
-  }
+  );
 
+}
 }

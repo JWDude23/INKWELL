@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import 'widgets/player_card.dart';
 import '../../shared/theme/ink_colors.dart';
+
 
 
 class NewGameScreen extends StatefulWidget {
@@ -16,6 +18,7 @@ class NewGameScreen extends StatefulWidget {
       _NewGameScreenState();
 
 }
+
 
 
 
@@ -35,6 +38,7 @@ class _NewGameScreenState extends State<NewGameScreen> {
   ];
 
 
+
   final List<InkType> playerColors = [
 
     InkType.amber,
@@ -46,28 +50,29 @@ class _NewGameScreenState extends State<NewGameScreen> {
 
 
 
-  void updatePlayerCount(int amount) {
 
-    final newCount =
+  void changePlayers(int amount){
+
+
+    final value =
         playerCount + amount;
 
 
-    if(newCount < 2 ||
-       newCount > 4) {
-
+    if(value < 2 || value > 4){
       return;
-
     }
 
 
-    setState(() {
+    setState((){
 
-      playerCount =
-          newCount;
+      playerCount = value;
 
     });
 
+
   }
+
+
 
 
 
@@ -88,224 +93,277 @@ class _NewGameScreenState extends State<NewGameScreen> {
       ),
 
 
-      body: AnimatedSize(
 
-        duration:
-            const Duration(
-              milliseconds: 300,
-            ),
+      body:
+          SafeArea(
 
 
-        child: SingleChildScrollView(
+            child:
+                LayoutBuilder(
 
-          padding:
-              const EdgeInsets.all(20),
 
+              builder:
+                  (context, constraints){
 
-          child: Column(
 
-            children: [
+                final isSmall =
+                    constraints.maxHeight < 700;
 
 
-              Text(
 
-                "Players",
+                return Column(
 
-                style:
-                    Theme.of(context)
-                    .textTheme
-                    .headlineSmall,
 
-              ),
+                  children: [
 
 
 
-              const SizedBox(
-                height: 16,
-              ),
+                    Padding(
 
+                      padding:
+                          const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 4,
+                          ),
 
 
-              Row(
+                      child: Row(
 
-                mainAxisAlignment:
-                    MainAxisAlignment.center,
+                        mainAxisAlignment:
+                            MainAxisAlignment.center,
 
 
-                children: [
+                        children: [
 
 
-                  IconButton(
 
-                    onPressed:
-                        (){
-                          updatePlayerCount(-1);
-                        },
+                          IconButton(
 
-                    icon:
-                        const Icon(
-                          Icons.remove_circle,
-                          size: 36,
-                        ),
+                            icon:
+                                const Icon(
+                                  Icons.remove_circle,
+                                ),
 
-                  ),
+                            onPressed:
+                                (){
+                                  changePlayers(-1);
+                                },
 
+                          ),
 
 
-                  Text(
 
-                    "$playerCount Players",
+                          Text(
 
-                    style:
-                        const TextStyle(
-                          fontSize: 22,
-                          fontWeight:
-                              FontWeight.bold,
-                        ),
+                            "$playerCount Players",
 
-                  ),
+                            style:
+                                Theme.of(context)
+                                .textTheme
+                                .headlineSmall,
 
+                          ),
 
 
-                  IconButton(
 
-                    onPressed:
-                        (){
-                          updatePlayerCount(1);
-                        },
+                          IconButton(
 
-                    icon:
-                        const Icon(
-                          Icons.add_circle,
-                          size: 36,
-                        ),
+                            icon:
+                                const Icon(
+                                  Icons.add_circle,
+                                ),
 
-                  ),
+                            onPressed:
+                                (){
+                                  changePlayers(1);
+                                },
 
+                          ),
 
-                ],
 
-              ),
 
+                        ],
 
-
-              const SizedBox(
-                height: 20,
-              ),
-
-
-
-
-              ...List.generate(
-
-                playerCount,
-
-                (index){
-
-
-                  return Padding(
-
-                    padding:
-                        const EdgeInsets.only(
-                          bottom: 16,
-                        ),
-
-
-                    child: PlayerCard(
-
-                      key:
-                          ValueKey(index),
-
-
-                      playerNumber:
-                          index + 1,
-
-
-                      name:
-                          playerNames[index],
-
-
-                      ink:
-                          playerColors[index],
-
-
-
-                      onNameChanged:
-                          (value){
-
-                            playerNames[index]
-                                =
-                                value;
-
-                          },
-
-
-                      onInkChanged:
-                          (value){
-
-                            setState((){
-
-                              playerColors[index]
-                                  =
-                                  value;
-
-                            });
-
-                          },
-
+                      ),
 
                     ),
 
-                  );
-
-                },
-
-              ),
 
 
 
-              const SizedBox(
-                height: 20,
-              ),
+                    Expanded(
+
+  child: GridView.builder(
+
+    physics:
+        const NeverScrollableScrollPhysics(),
+
+    padding:
+        const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 2,
+        ),
+
+
+    gridDelegate:
+        const SliverGridDelegateWithFixedCrossAxisCount(
+
+          crossAxisCount: 2,
+
+          crossAxisSpacing: 12,
+
+          mainAxisSpacing: 12,
+
+          childAspectRatio: 1.25,
+
+        ),
+
+
+    itemCount:
+        playerCount,
+
+
+    itemBuilder:
+        (context, index) {
+
+
+      return PlayerCard(
+
+        key:
+            ValueKey(index),
+
+
+        playerNumber:
+            index + 1,
+
+
+        name:
+            playerNames[index],
+
+
+        ink:
+            playerColors[index],
+
+
+        onNameChanged:
+            (value){
+
+          playerNames[index] =
+              value;
+
+        },
+
+
+        onInkChanged:
+            (value){
+
+          setState((){
+
+            playerColors[index] =
+                value;
+
+          });
+
+        },
+
+      )
+
+      .animate()
+
+      .fadeIn(
+
+        duration:
+            300.ms,
+
+      )
+
+      .slideY(
+
+        begin:
+            .15,
+
+      );
+
+
+    },
+
+  ),
+
+),
 
 
 
-              SizedBox(
-
-                width:
-                    double.infinity,
 
 
-                child:
-                    FilledButton(
+                    Padding(
 
-                      onPressed:
-                          (){
-
-
-                      },
-
+                      padding:
+                          const EdgeInsets.fromLTRB(
+                            12,
+                            4,
+                            12,
+                            4,
+                          ),
 
                       child:
-                          const Text(
-                            "Start Game",
+
+                          SizedBox(
+
+                            width:
+                                double.infinity,
+
+
+                            child:
+
+                                FilledButton(
+
+                                  style:
+                                      FilledButton.styleFrom(
+
+  minimumSize:
+      const Size(
+        double.infinity,
+        42,
+      ),
+
+),
+
+
+                                  onPressed:
+                                      (){
+
+
+                                      },
+
+
+                                  child:
+                                      const Text(
+                                        "START GAME",
+                                      ),
+
+                                ),
+
                           ),
 
                     ),
 
-              ),
 
 
-            ],
+                  ],
+
+
+                );
+
+              },
+
+            ),
 
           ),
 
-        ),
-
-      ),
-
     );
 
+
   }
+
 
 }
