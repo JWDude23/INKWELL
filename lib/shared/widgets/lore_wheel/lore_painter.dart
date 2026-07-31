@@ -2,6 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'lore_theme.dart';
+
+
 
 class LorePainter extends CustomPainter {
 
@@ -10,14 +13,15 @@ class LorePainter extends CustomPainter {
 
     required this.progress,
 
-    required this.color,
+    required this.theme,
 
   });
 
 
+
   final double progress;
 
-  final Color color;
+  final LoreTheme theme;
 
 
 
@@ -36,17 +40,12 @@ class LorePainter extends CustomPainter {
 
 
     final radius =
-        size.width / 2;
+        size.width / 2 - 10;
 
 
 
-    final backgroundPaint =
+    final paint =
         Paint()
-
-          ..color =
-              Colors.grey.withValues(
-                alpha: .2,
-              )
 
           ..style =
               PaintingStyle.stroke
@@ -56,69 +55,76 @@ class LorePainter extends CustomPainter {
 
 
 
-    final progressPaint =
-        Paint()
-
-          ..color =
-              color
-
-          ..style =
-              PaintingStyle.stroke
-
-          ..strokeWidth =
-              12
-
-          ..strokeCap =
-              StrokeCap.round;
+    final segmentAngle =
+        (2 * pi) / theme.segments;
 
 
 
-    canvas.drawCircle(
+    for(
+      int i = 0;
+      i < theme.segments;
+      i++
+    ){
 
-      center,
-
-      radius - 6,
-
-      backgroundPaint,
-
-    );
+      final startAngle =
+          -pi / 2 +
+          (i * segmentAngle);
 
 
 
-    canvas.drawArc(
+      final filled =
+          i <
+          (progress * theme.segments);
 
-      Rect.fromCircle(
 
-        center:
-            center,
 
-        radius:
-            radius - 6,
+      paint.color =
+          filled
+              ? theme.activeColor
+              : theme.inactiveColor;
 
-      ),
 
-      -pi / 2,
 
-      2 * pi * progress,
+      canvas.drawArc(
 
-      false,
+        Rect.fromCircle(
 
-      progressPaint,
+          center:
+              center,
 
-    );
+          radius:
+              radius,
 
+        ),
+
+
+        startAngle,
+
+
+        segmentAngle - .08,
+
+
+        false,
+
+
+        paint,
+
+      );
+
+    }
 
   }
+
 
 
 
   @override
   bool shouldRepaint(
     LorePainter oldDelegate,
-  ) {
+  ){
 
     return oldDelegate.progress != progress ||
-        oldDelegate.color != color;
+        oldDelegate.theme != theme;
 
   }
 

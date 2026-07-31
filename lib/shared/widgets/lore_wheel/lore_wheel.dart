@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'lore_stage.dart';
 import 'lore_painter.dart';
+import 'lore_theme.dart';
 
 
 class LoreWheel extends StatelessWidget {
@@ -18,6 +19,9 @@ class LoreWheel extends StatelessWidget {
 
     required this.onChanged,
 
+this.theme =
+    LoreTheme.classic,
+
   });
 
 
@@ -28,6 +32,8 @@ class LoreWheel extends StatelessWidget {
   final Color color;
 
   final Function(int) onChanged;
+
+  final LoreTheme theme;
 
 
 
@@ -123,16 +129,14 @@ class LoreWheel extends StatelessWidget {
 
                   LorePainter(
 
-                    progress:
+  progress:
+      (lore / maxLore)
+          .clamp(0.0, 1.0),
 
-                        (lore / maxLore)
-                            .clamp(0.0, 1.0),
+  theme:
+      theme,
 
-
-                    color:
-                        color,
-
-                  ),
+),
 
 
 
