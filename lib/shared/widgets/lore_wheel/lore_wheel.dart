@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 
 import 'lore_stage.dart';
+import 'lore_painter.dart';
 
 
 class LoreWheel extends StatelessWidget {
 
   const LoreWheel({
 
-  super.key,
+    super.key,
 
-  required this.lore,
+    required this.lore,
 
-  required this.maxLore,
+    required this.maxLore,
 
-  required this.color,
+    required this.color,
 
-  required this.onChanged,
+    required this.onChanged,
 
-});
+  });
 
 
   final int lore;
@@ -34,9 +35,6 @@ class LoreWheel extends StatelessWidget {
   Widget build(BuildContext context) {
 
 
-    
-
-
     final stage =
         getLoreStage(
           lore,
@@ -44,99 +42,158 @@ class LoreWheel extends StatelessWidget {
         );
 
 
-    return AnimatedContainer(
+    return GestureDetector(
 
-      duration:
-          const Duration(
-            milliseconds: 400,
-          ),
+      onTap: () {
 
+        onChanged(1);
 
-      width: 140,
-
-      height: 140,
+      },
 
 
-      decoration:
-          BoxDecoration(
+      onLongPress: () {
 
-            shape:
-                BoxShape.circle,
+        onChanged(-1);
+
+      },
 
 
-            border:
-                Border.all(
+      child: AnimatedContainer(
+
+        duration:
+            const Duration(
+              milliseconds: 400,
+            ),
+
+
+        width:
+            140,
+
+
+        height:
+            140,
+
+
+        decoration:
+            BoxDecoration(
+
+              shape:
+                  BoxShape.circle,
+
+
+              border:
+                  Border.all(
+
+                    color:
+                        color,
+
+                    width:
+                        6,
+
+                  ),
+
+
+              boxShadow: [
+
+                BoxShadow(
 
                   color:
-                      color,
-
-                  width:
-                      6,
-
-                ),
-
-
-            boxShadow: [
-
-              BoxShadow(
-
-                color:
-                    color.withValues(
-                      alpha:
-                          stage.index * .08,
-                    ),
-
-                blurRadius:
-                    20,
-
-              ),
-
-            ],
-
-          ),
-
-
-
-      child:
-          Center(
-
-            child:
-                AnimatedSwitcher(
-
-                  duration:
-                      const Duration(
-                        milliseconds: 250,
+                      color.withValues(
+                        alpha:
+                            stage.index * .08,
                       ),
 
 
-                  child:
-                      Text(
-
-                        "$lore",
-
-                        key:
-                            ValueKey(lore),
-
-
-                        style:
-                            TextStyle(
-
-                              fontSize:
-                                  48,
-
-                              fontWeight:
-                                  FontWeight.bold,
-
-                              color:
-                                  color,
-
-                            ),
-
-                      ),
+                  blurRadius:
+                      20,
 
                 ),
 
-          ),
+              ],
+
+            ),
+
+
+
+        child:
+
+            CustomPaint(
+
+              painter:
+
+                  LorePainter(
+
+                    progress:
+
+                        (lore / maxLore)
+                            .clamp(0.0, 1.0),
+
+
+                    color:
+                        color,
+
+                  ),
+
+
+
+              child:
+
+                  Center(
+
+                    child:
+
+                        AnimatedSwitcher(
+
+                          duration:
+
+                              const Duration(
+
+                                milliseconds:
+                                    250,
+
+                              ),
+
+
+
+                          child:
+
+                              Text(
+
+                                "$lore",
+
+
+                                key:
+
+                                    ValueKey(lore),
+
+
+
+                                style:
+
+                                    TextStyle(
+
+                                      fontSize:
+                                          48,
+
+
+                                      fontWeight:
+                                          FontWeight.bold,
+
+
+                                      color:
+                                          color,
+
+                                    ),
+
+                              ),
+
+                        ),
+
+                  ),
+
+            ),
+
+      ),
 
     );
 
