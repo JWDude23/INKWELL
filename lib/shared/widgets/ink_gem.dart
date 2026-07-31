@@ -61,7 +61,7 @@ class InkGem extends StatelessWidget {
 
                       color:
                           InkColors.get(type)
-                          .withOpacity(.7),
+                          .withValues(alpha: .7),
 
                       blurRadius: 18,
 

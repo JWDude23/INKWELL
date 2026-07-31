@@ -1,0 +1,7 @@
+enum GameMode {
+
+  table,
+
+  personal,
+
+}

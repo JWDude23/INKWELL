@@ -106,8 +106,7 @@ class _NewGameScreenState extends State<NewGameScreen> {
                   (context, constraints){
 
 
-                final isSmall =
-                    constraints.maxHeight < 700;
+                
 
 
 
