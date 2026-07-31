@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-
 import 'widgets/player_card.dart';
 import '../../shared/theme/ink_colors.dart';
+import '../game/game_screen.dart';
+import '../../core/models/player_model.dart';
+import '../../core/models/game_model.dart';
 
 
 
@@ -328,11 +330,26 @@ class _NewGameScreenState extends State<NewGameScreen> {
 ),
 
 
-                                  onPressed:
-                                      (){
+                                  onPressed: () {
+  final players = List.generate(playerCount, (index) {
+    return PlayerModel(
+      name: playerNames[index],
+      identityInk: playerColors[index],
+    );
+  });
 
+  final game = GameModel(
+    players: players,
+  );
 
-                                      },
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (_) => GameScreen(
+        game: game,
+      ),
+    ),
+  );
+},
 
 
                                   child:
