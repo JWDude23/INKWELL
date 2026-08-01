@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/ink_colors.dart';
 
 
+
 class InkGem extends StatefulWidget {
 
 
@@ -18,9 +19,12 @@ class InkGem extends StatefulWidget {
 
     this.exerted = false,
 
+    this.empty = false,
+
     this.size = 28,
 
   }) :
+
 
     color = color ??
         InkColors.colors[type]!;
@@ -32,6 +36,8 @@ class InkGem extends StatefulWidget {
   final bool selected;
 
   final bool exerted;
+
+  final bool empty;
 
   final double size;
 
@@ -48,12 +54,12 @@ class InkGem extends StatefulWidget {
 
 
 
-
 class _InkGemState extends State<InkGem>
     with SingleTickerProviderStateMixin {
 
 
   late AnimationController _controller;
+
 
 
 
@@ -63,20 +69,18 @@ class _InkGemState extends State<InkGem>
     super.initState();
 
 
-    _controller =
+    _controller = AnimationController(
 
-        AnimationController(
+      vsync:
+          this,
 
-          vsync:
-              this,
+      duration:
 
-          duration:
+          const Duration(
+            milliseconds: 900,
+          ),
 
-              const Duration(
-                milliseconds: 900,
-              ),
-
-        );
+    );
 
 
     _controller.repeat(
@@ -85,6 +89,7 @@ class _InkGemState extends State<InkGem>
 
 
   }
+
 
 
 
@@ -114,10 +119,12 @@ class _InkGemState extends State<InkGem>
 
                 : widget.exerted
 
-                    ? .10
+                    ? .08
 
                     : .25 +
                         (_controller.value * .15);
+
+
 
 
 
@@ -161,53 +168,81 @@ class _InkGemState extends State<InkGem>
 
 
 
+
                       color:
 
-                          widget.color,
+                          widget.empty
+
+                              ? Colors.transparent
+
+                              : widget.color,
+
 
 
 
                       border:
 
-                          widget.selected
+                          Border.all(
 
-                              ? Border.all(
+
+                            color:
+
+                                widget.empty
+
+                                    ? Colors.grey.shade400
+
+                                    : widget.selected
+
+                                        ? Colors.white
+
+                                        : widget.color,
+
+
+                            width:
+
+                                widget.selected
+
+                                    ? 2
+
+                                    : 1,
+
+
+                          ),
+
+
+
+
+                      boxShadow:
+
+                          widget.empty
+
+                              ? []
+
+                              :
+
+                              [
+
+
+                                BoxShadow(
 
                                   color:
-                                      Colors.white,
 
-                                  width:
-                                      2,
+                                      widget.color.withValues(
 
-                                )
+                                        alpha:
+                                            glow,
 
-                              : null,
-
+                                      ),
 
 
-                      boxShadow: [
+                                  blurRadius:
+                                      12,
 
 
-                        BoxShadow(
-
-                          color:
-
-                              widget.color.withValues(
-
-                                alpha:
-                                    glow,
-
-                              ),
+                                ),
 
 
-                          blurRadius:
-                              12,
-
-
-                        ),
-
-
-                      ],
+                              ],
 
 
                     ),
@@ -226,6 +261,7 @@ class _InkGemState extends State<InkGem>
 
 
   }
+
 
 
 

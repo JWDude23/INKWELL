@@ -41,6 +41,8 @@ class PlayerSeatWidget extends StatelessWidget {
 
 
 
+
+
   double get rotation {
 
 
@@ -55,13 +57,13 @@ class PlayerSeatWidget extends StatelessWidget {
 
       case PlayerSeat.left:
 
-        return -pi / 2;
+        return pi / 2;
 
 
 
       case PlayerSeat.right:
 
-        return pi / 2;
+        return -pi / 2;
 
 
 
@@ -74,7 +76,11 @@ class PlayerSeatWidget extends StatelessWidget {
 
     }
 
+
   }
+
+
+
 
 
 
@@ -86,7 +92,9 @@ class PlayerSeatWidget extends StatelessWidget {
 
     return Transform.rotate(
 
+
       angle:
+
           rotation,
 
 
@@ -95,17 +103,26 @@ class PlayerSeatWidget extends StatelessWidget {
 
           AnimatedContainer(
 
+
             duration:
 
                 const Duration(
 
-                  milliseconds: 300,
+                  milliseconds:
+                      300,
 
                 ),
 
 
 
+            curve:
+
+                Curves.easeOut,
+
+
+
             transform:
+
 
                 Matrix4.translationValues(
 
@@ -121,39 +138,59 @@ class PlayerSeatWidget extends StatelessWidget {
 
 
 
+
+
+
             child:
+
 
                 AnimatedScale(
 
+
                   duration:
+
 
                       const Duration(
 
-                        milliseconds: 300,
+                        milliseconds:
+                            300,
 
                       ),
 
 
 
+                  curve:
+
+
+                      Curves.easeOut,
+
+
+
                   scale:
 
+
                       isActive
-
                           ? 1.15
-
                           : .85,
+
+
+
 
 
 
                   child:
 
+
                       AnimatedOpacity(
+
 
                         duration:
 
+
                             const Duration(
 
-                              milliseconds: 300,
+                              milliseconds:
+                                  300,
 
                             ),
 
@@ -161,19 +198,26 @@ class PlayerSeatWidget extends StatelessWidget {
 
                         opacity:
 
+
                             isActive
                                 ? 1.0
                                 : .75,
 
 
 
+
+
+
                         child:
 
+
                             TablePlayerPanel(
+
 
                               player:
 
                                   player,
+
 
 
                               isActive:
@@ -181,9 +225,11 @@ class PlayerSeatWidget extends StatelessWidget {
                                   isActive,
 
 
+
                               onLoreChanged:
 
                                   onLoreChanged,
+
 
 
                               onSpendInk:
@@ -193,11 +239,19 @@ class PlayerSeatWidget extends StatelessWidget {
 
                             ),
 
+
+
                       ),
+
+
 
                 ),
 
+
+
           ),
+
+
 
     );
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/models/player_model.dart';
 
 import '../../../shared/widgets/lore_wheel/lore_wheel.dart';
-import '../../../shared/widgets/ink_counter/ink_counter.dart';
+import '../../../shared/widgets/ink_display/ink_display.dart';
 
 
 
@@ -44,24 +44,34 @@ class TablePlayerPanel extends StatelessWidget {
 
     return AnimatedContainer(
 
+
       duration:
 
           const Duration(
 
-            milliseconds: 300,
+            milliseconds:
+                300,
 
           ),
 
 
+
+      width:
+
+          140,
+
+
+
       padding:
 
-          const EdgeInsets.all(10),
+          const EdgeInsets.all(8),
 
 
 
       decoration:
 
           BoxDecoration(
+
 
             color:
 
@@ -72,9 +82,10 @@ class TablePlayerPanel extends StatelessWidget {
                     : Colors.white,
 
 
+
             borderRadius:
 
-                BorderRadius.circular(18),
+                BorderRadius.circular(16),
 
 
 
@@ -85,12 +96,16 @@ class TablePlayerPanel extends StatelessWidget {
 
                 blurRadius:
 
-                    isActive ? 20 : 6,
+                    isActive
+                        ? 18
+                        : 5,
 
 
                 spreadRadius:
 
-                    isActive ? 4 : 1,
+                    isActive
+                        ? 3
+                        : 1,
 
 
                 color:
@@ -107,12 +122,17 @@ class TablePlayerPanel extends StatelessWidget {
 
 
 
+
+
       child:
 
           Column(
 
+
             mainAxisSize:
+
                 MainAxisSize.min,
+
 
 
             children: [
@@ -123,15 +143,25 @@ class TablePlayerPanel extends StatelessWidget {
 
                 player.name,
 
+
+                textAlign:
+
+                    TextAlign.center,
+
+
+
                 style:
 
                     const TextStyle(
 
                       fontWeight:
+
                           FontWeight.bold,
 
+
                       fontSize:
-                          18,
+
+                          14,
 
                     ),
 
@@ -140,10 +170,12 @@ class TablePlayerPanel extends StatelessWidget {
 
 
 
+
               const SizedBox(
 
                 height:
-                    8,
+
+                    4,
 
               ),
 
@@ -153,14 +185,17 @@ class TablePlayerPanel extends StatelessWidget {
 
               LoreWheel(
 
+
                 lore:
 
                     player.lore,
 
 
+
                 maxLore:
 
                     20,
+
 
 
                 color:
@@ -173,7 +208,10 @@ class TablePlayerPanel extends StatelessWidget {
 
                     onLoreChanged,
 
+
               ),
+
+
 
 
 
@@ -181,42 +219,7 @@ class TablePlayerPanel extends StatelessWidget {
               const SizedBox(
 
                 height:
-                    10,
 
-              ),
-
-
-
-
-              InkCounter(
-
-                available:
-
-                    player.availableInk,
-
-
-                exerted:
-
-                    player.exertedInk,
-
-
-                color:
-
-                    player.identityInk,
-
-
-                onSpend:
-
-                    onSpendInk,
-
-              ),
-
-
-
-
-              const SizedBox(
-
-                height:
                     6,
 
               ),
@@ -224,22 +227,24 @@ class TablePlayerPanel extends StatelessWidget {
 
 
 
-              if(isActive)
 
-                const Text(
+              InkDisplay(
 
-                  "YOUR TURN",
 
-                  style:
+                available:
 
-                      TextStyle(
+                    player.availableInk,
 
-                        fontWeight:
-                            FontWeight.bold,
 
-                      ),
 
-                ),
+                total:
+
+                    player.availableInk +
+                    player.exertedInk,
+
+
+              ),
+
 
 
 

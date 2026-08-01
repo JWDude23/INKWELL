@@ -38,32 +38,8 @@ class TableView extends StatefulWidget {
 class _TableViewState extends State<TableView> {
 
 
-
-  List<PlayerModel> get orderedPlayers {
-
-
-    final players =
-        List<PlayerModel>.from(
-          widget.game.players,
-        );
-
-
-
-    final active =
-        widget.game.activePlayer;
-
-
-
-    players.remove(active);
-
-
-    players.add(active);
-
-
-
-    return players;
-
-  }
+  List<PlayerModel> get players =>
+      widget.game.players;
 
 
 
@@ -71,7 +47,20 @@ class _TableViewState extends State<TableView> {
 
 
 
-  Alignment getPosition(PlayerSeat? seat) {
+  Offset getSeatPosition(
+      PlayerSeat? seat,
+      Size size,
+  ) {
+
+
+    final horizontal =
+        size.width * .20;
+
+
+    final vertical =
+        size.height * .20;
+
+
 
 
     switch(seat) {
@@ -79,19 +68,28 @@ class _TableViewState extends State<TableView> {
 
       case PlayerSeat.top:
 
-        return Alignment.topCenter;
+        return Offset(
+          0,
+          -vertical,
+        );
 
 
 
       case PlayerSeat.left:
 
-        return Alignment.centerLeft;
+        return Offset(
+          -horizontal,
+          0,
+        );
 
 
 
       case PlayerSeat.right:
 
-        return Alignment.centerRight;
+        return Offset(
+          horizontal,
+          0,
+        );
 
 
 
@@ -99,13 +97,184 @@ class _TableViewState extends State<TableView> {
 
       case null:
 
-        return Alignment.bottomCenter;
+        return Offset(
+          0,
+          vertical,
+        );
 
 
     }
 
+  }
+
+
+
+
+
+
+
+
+
+  Widget buildPlayerCard(
+      PlayerModel player,
+      Size size,
+      bool active,
+  ) {
+
+
+    final position =
+        getSeatPosition(
+          player.seat,
+          size,
+        );
+
+
+
+    final sidePlayer =
+        player.seat == PlayerSeat.left ||
+        player.seat == PlayerSeat.right;
+
+
+
+    return Transform.translate(
+
+
+      offset:
+
+          position,
+
+
+
+      child:
+
+
+          Transform.scale(
+
+
+            scale:
+
+
+                active
+
+                    ? 1.15
+
+                    : sidePlayer
+
+                        ? .78
+
+                        : .90,
+
+
+
+            child:
+
+
+                KeyedSubtree(
+
+
+                  key:
+
+                      ValueKey(
+                        player.name,
+                      ),
+
+
+
+                  child:
+
+
+                      PlayerSeatWidget(
+
+
+                        player:
+
+                            player,
+
+
+
+                        isActive:
+
+                            active,
+
+
+
+                        onLoreChanged:
+
+                            (amount) {
+
+
+                              setState(() {
+
+
+                                player.addLore(
+
+                                  amount,
+
+                                  maxLore:
+                                      20,
+
+                                );
+
+
+                              });
+
+
+                            },
+
+
+
+                        onSpendInk:
+
+
+                            () {
+
+
+                              setState(() {
+
+
+                                player.exertInk(1);
+
+
+                              });
+
+
+                            },
+
+
+                      ),
+
+
+                ),
+
+
+          ),
+
+
+    );
+
 
   }
+
+
+
+
+
+
+
+  void nextTurn() {
+
+
+    setState(() {
+
+
+      widget.game.nextTurn();
+
+
+    });
+
+
+  }
+
 
 
 
@@ -121,235 +290,238 @@ class _TableViewState extends State<TableView> {
     return Scaffold(
 
 
-      body:
 
-          Container(
+      floatingActionButton:
 
 
-            decoration:
+          FloatingActionButton.extended(
 
-                BoxDecoration(
 
-                  color:
-                      Colors.brown.shade900,
+            onPressed:
 
+                nextTurn,
+
+
+
+            icon:
+
+                const Icon(
+                  Icons.auto_stories,
                 ),
 
 
 
+            label:
 
-            child:
-
-                Stack(
-
-
-                  children: [
-
-
-
-
-
-                    Center(
-
-
-                      child:
-
-                          Container(
-
-                            width:
-                                220,
-
-
-                            height:
-                                220,
-
-
-
-                            decoration:
-
-                                BoxDecoration(
-
-
-                                  shape:
-                                      BoxShape.circle,
-
-
-                                  color:
-                                      Colors.brown.shade700,
-
-
-
-                                  boxShadow: [
-
-
-                                    BoxShadow(
-
-
-                                      blurRadius:
-                                          30,
-
-
-                                      spreadRadius:
-                                          5,
-
-
-                                      color:
-                                          Colors.black26,
-
-
-                                    ),
-
-
-                                  ],
-
-
-                                ),
-
-
-                          ),
-
-
-                    ),
-
-
-
-
-
-
-
-
-                    ...orderedPlayers.map(
-
-                      (player) {
-
-
-
-                        return Align(
-
-
-                          alignment:
-
-                              getPosition(
-
-                                player.seat,
-
-                              ),
-
-
-
-
-                          child:
-
-                              Padding(
-
-
-                                padding:
-
-                                    const EdgeInsets.all(24),
-
-
-
-
-                                child:
-
-                                    PlayerSeatWidget(
-
-
-
-                                      player:
-
-                                          player,
-
-
-
-                                      isActive:
-
-                                          player ==
-                                              widget.game.activePlayer,
-
-
-
-
-
-                                      onLoreChanged:
-
-                                          (amount) {
-
-
-                                            setState(() {
-
-
-                                              player.addLore(
-
-
-                                                amount,
-
-
-                                                maxLore:
-                                                    20,
-
-
-                                              );
-
-
-                                            });
-
-
-                                          },
-
-
-
-
-
-
-                                      onSpendInk:
-
-
-                                          () {
-
-
-                                            setState(() {
-
-
-                                              player.exertInk(1);
-
-
-                                            });
-
-
-                                          },
-
-
-
-                                    ),
-
-
-                              ),
-
-
-                        );
-
-
-                      },
-
-
-                    ),
-
-
-
-
-
-                  ],
-
-
+                const Text(
+                  "Next Page",
                 ),
 
 
           ),
 
 
-    );
 
+
+
+
+      body:
+
+
+          LayoutBuilder(
+
+
+            builder:
+
+                (context, constraints) {
+
+
+
+              final size =
+                  Size(
+                    constraints.maxWidth,
+                    constraints.maxHeight,
+                  );
+
+
+
+              final activePlayer =
+                  widget.game.activePlayer;
+
+
+
+              final inactivePlayers =
+                  players
+                      .where(
+                        (player) =>
+                            player != activePlayer,
+                      )
+                      .toList();
+
+
+
+
+
+              return Container(
+
+
+                width:
+
+                    double.infinity,
+
+
+
+                height:
+
+                    double.infinity,
+
+
+
+                decoration:
+
+
+                    BoxDecoration(
+
+                      color:
+
+                          Colors.brown.shade900,
+
+                    ),
+
+
+
+
+                child:
+
+
+                    Stack(
+
+
+                      alignment:
+
+                          Alignment.center,
+
+
+
+                      children: [
+
+
+
+
+
+                        Container(
+
+
+                          width:
+
+                              240,
+
+
+                          height:
+
+                              240,
+
+
+
+                          decoration:
+
+
+                              BoxDecoration(
+
+
+                                shape:
+
+                                    BoxShape.circle,
+
+
+
+                                color:
+
+                                    Colors.brown.shade700,
+
+
+
+                                boxShadow: [
+
+
+                                  BoxShadow(
+
+                                    blurRadius:
+
+                                        30,
+
+                                    spreadRadius:
+
+                                        5,
+
+                                    color:
+
+                                        Colors.black26,
+
+                                  ),
+
+
+                                ],
+
+                              ),
+
+
+                        ),
+
+
+
+
+
+                        // Other players first
+
+                        ...inactivePlayers.map(
+
+                          (player) {
+
+                            return buildPlayerCard(
+
+                              player,
+
+                              size,
+
+                              false,
+
+                            );
+
+                          },
+
+                        ),
+
+
+
+
+
+                        // Active player always on top
+
+                        buildPlayerCard(
+
+                          activePlayer,
+
+                          size,
+
+                          true,
+
+                        ),
+
+
+                      ],
+
+                    ),
+
+              );
+
+            },
+
+
+          ),
+
+
+    );
 
   }
 

@@ -20,6 +20,8 @@ class InkCounter extends StatelessWidget {
 
     required this.onSpend,
 
+    this.maxInk = 10,
+
   });
 
 
@@ -27,6 +29,8 @@ class InkCounter extends StatelessWidget {
   final int available;
 
   final int exerted;
+
+  final int maxInk;
 
   final InkType color;
 
@@ -40,13 +44,18 @@ class InkCounter extends StatelessWidget {
   Widget build(BuildContext context) {
 
 
+
+
+
     return GestureDetector(
 
 
       onTap:
 
           available > 0
+
               ? onSpend
+
               : null,
 
 
@@ -55,9 +64,7 @@ class InkCounter extends StatelessWidget {
 
           Column(
 
-
             mainAxisSize:
-
                 MainAxisSize.min,
 
 
@@ -66,22 +73,39 @@ class InkCounter extends StatelessWidget {
 
 
 
+              const Text(
+
+                "READY",
+
+                style:
+
+                    TextStyle(
+
+                      fontSize:
+                          10,
+
+                      fontWeight:
+                          FontWeight.bold,
+
+                    ),
+
+              ),
+
+
+
+
+
               Row(
 
-
                 mainAxisSize:
-
                     MainAxisSize.min,
-
 
 
                 children:
 
-
                     List.generate(
 
-
-                      available,
+                      maxInk,
 
 
                       (index) {
@@ -89,13 +113,12 @@ class InkCounter extends StatelessWidget {
 
                         return Padding(
 
-
                           padding:
 
                               const EdgeInsets.symmetric(
 
                                 horizontal:
-                                    2,
+                                    1,
 
                               ),
 
@@ -105,14 +128,16 @@ class InkCounter extends StatelessWidget {
 
                               InkGem(
 
-
                                 color:
 
                                     inkColorMap[color]!,
 
+                                empty:
+
+                                    index >= available,
+
 
                               ),
-
 
                         );
 
@@ -124,6 +149,7 @@ class InkCounter extends StatelessWidget {
 
 
               ),
+
 
 
 
@@ -132,7 +158,6 @@ class InkCounter extends StatelessWidget {
               const SizedBox(
 
                 height:
-
                     8,
 
               ),
@@ -141,36 +166,54 @@ class InkCounter extends StatelessWidget {
 
 
 
+              const Text(
+
+                "EXERTED",
+
+                style:
+
+                    TextStyle(
+
+                      fontSize:
+                          10,
+
+                      fontWeight:
+                          FontWeight.bold,
+
+                    ),
+
+              ),
+
+
+
+
+
+
               Row(
 
-
                 mainAxisSize:
-
                     MainAxisSize.min,
-
 
 
                 children:
 
-
                     List.generate(
 
-
-                      exerted,
+                      maxInk,
 
 
                       (index) {
 
 
-                        return Padding(
 
+                        return Padding(
 
                           padding:
 
                               const EdgeInsets.symmetric(
 
                                 horizontal:
-                                    2,
+                                    1,
 
                               ),
 
@@ -180,16 +223,19 @@ class InkCounter extends StatelessWidget {
 
                               InkGem(
 
-
                                 color:
 
                                     inkColorMap[color]!,
 
 
-
                                 exerted:
 
-                                    true,
+                                    index < exerted,
+
+
+                                empty:
+
+                                    index >= exerted,
 
 
                               ),
@@ -205,6 +251,8 @@ class InkCounter extends StatelessWidget {
 
 
               ),
+
+
 
 
             ],
