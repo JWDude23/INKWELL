@@ -2,6 +2,7 @@ import '../../shared/theme/ink_colors.dart';
 import 'player_seat.dart';
 
 
+
 class PlayerModel {
 
 
@@ -11,8 +12,6 @@ class PlayerModel {
 
     required this.identityInk,
 
-    this.seat,
-
     this.lore = 0,
 
     this.availableInk = 0,
@@ -20,6 +19,8 @@ class PlayerModel {
     this.exertedInk = 0,
 
     this.isLocalPlayer = false,
+
+    this.seat,
 
   });
 
@@ -29,9 +30,6 @@ class PlayerModel {
 
 
   InkType identityInk;
-
-
-  PlayerSeat? seat;
 
 
   int lore;
@@ -46,6 +44,24 @@ class PlayerModel {
   bool isLocalPlayer;
 
 
+  PlayerSeat? seat;
+
+
+
+  // Future hidden game tracking
+
+  int handSize = 0;
+
+
+  int deckSize = 0;
+
+
+  int discardSize = 0;
+
+
+
+
+
 
   void addLore(
     int amount, {
@@ -56,56 +72,73 @@ class PlayerModel {
     lore += amount;
 
 
-    if (lore < 0) {
+
+    if(lore < 0) {
 
       lore = 0;
 
     }
 
 
-    if (lore > maxLore) {
+
+    if(lore > maxLore) {
 
       lore = maxLore;
 
     }
 
+
   }
 
 
 
-  void addInk(
-    int amount,
-  ) {
+
+
+
+  void addInk(int amount){
+
 
     availableInk += amount;
 
+
   }
 
 
 
-  void exertInk(
-    int amount,
-  ) {
 
 
-    if (amount <= availableInk) {
+
+  void exertInk(int amount){
+
+
+    if(amount <= availableInk){
+
 
       availableInk -= amount;
 
+
       exertedInk += amount;
 
+
     }
+
 
   }
 
 
 
-  void refreshInk() {
+
+
+
+
+  void refreshInk(){
 
 
     availableInk += exertedInk;
 
+
     exertedInk = 0;
+
 
   }
 

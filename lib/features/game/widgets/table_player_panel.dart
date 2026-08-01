@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/models/player_model.dart';
+import '../../../shared/theme/ink_colors.dart';
 
 import '../../../shared/widgets/lore_wheel/lore_wheel.dart';
 import '../../../shared/widgets/ink_display/ink_display.dart';
@@ -38,6 +39,16 @@ class TablePlayerPanel extends StatelessWidget {
 
 
 
+  Color get inkColor {
+
+    return inkColorMap[player.identityInk]!;
+
+  }
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -49,76 +60,179 @@ class TablePlayerPanel extends StatelessWidget {
 
           const Duration(
 
-            milliseconds:
-                300,
+            milliseconds: 250,
 
           ),
+
+
+      curve:
+
+          Curves.easeOut,
 
 
 
       width:
 
-          140,
+          130,
 
 
 
       padding:
 
-          const EdgeInsets.all(8),
+          const EdgeInsets.all(6),
+
+
 
 
 
       decoration:
 
+
           BoxDecoration(
 
 
-            color:
 
-                isActive
+            gradient:
 
-                    ? Colors.amber.shade100
 
-                    : Colors.white,
+                LinearGradient(
+
+
+
+                  colors: [
+
+
+                    Colors.white,
+
+
+                    inkColor.withValues(
+
+                      alpha: .10,
+
+                    ),
+
+
+                  ],
+
+
+
+                  begin:
+
+                      Alignment.topLeft,
+
+
+
+                  end:
+
+                      Alignment.bottomRight,
+
+
+                ),
+
+
 
 
 
             borderRadius:
 
-                BorderRadius.circular(16),
+
+                BorderRadius.circular(18),
+
+
+
+
+
+            border:
+
+
+                Border.all(
+
+
+
+                  color:
+
+
+                      isActive
+
+                          ? Colors.amber
+
+                          : inkColor,
+
+
+
+                  width:
+
+
+                      isActive
+
+                          ? 3
+
+                          : 2,
+
+
+
+                ),
+
+
 
 
 
             boxShadow: [
 
 
+
               BoxShadow(
 
-                blurRadius:
-
-                    isActive
-                        ? 18
-                        : 5,
-
-
-                spreadRadius:
-
-                    isActive
-                        ? 3
-                        : 1,
 
 
                 color:
 
-                    Colors.black26,
+
+                    isActive
+
+                        ? Colors.amber.withValues(
+
+                            alpha: .35,
+
+                          )
+
+                        : Colors.black26,
+
+
+
+                blurRadius:
+
+
+                    isActive
+
+                        ? 16
+
+                        : 6,
+
+
+
+                spreadRadius:
+
+
+                    isActive
+
+                        ? 2
+
+                        : 1,
+
 
               ),
+
 
 
             ],
 
 
+
           ),
+
+
+
 
 
 
@@ -126,12 +240,17 @@ class TablePlayerPanel extends StatelessWidget {
 
       child:
 
+
           Column(
+
 
 
             mainAxisSize:
 
+
                 MainAxisSize.min,
+
+
 
 
 
@@ -139,12 +258,32 @@ class TablePlayerPanel extends StatelessWidget {
 
 
 
+
+
               Text(
+
+
 
                 player.name,
 
 
+
+                maxLines:
+
+
+                    1,
+
+
+
+                overflow:
+
+
+                    TextOverflow.ellipsis,
+
+
+
                 textAlign:
+
 
                     TextAlign.center,
 
@@ -152,20 +291,29 @@ class TablePlayerPanel extends StatelessWidget {
 
                 style:
 
+
                     const TextStyle(
+
+
 
                       fontWeight:
 
                           FontWeight.bold,
 
 
+
                       fontSize:
 
                           14,
 
+
+
                     ),
 
+
+
               ),
+
 
 
 
@@ -183,7 +331,9 @@ class TablePlayerPanel extends StatelessWidget {
 
 
 
+
               LoreWheel(
+
 
 
                 lore:
@@ -200,13 +350,14 @@ class TablePlayerPanel extends StatelessWidget {
 
                 color:
 
-                    Colors.amber,
+                    inkColor,
 
 
 
                 onChanged:
 
                     onLoreChanged,
+
 
 
               ),
@@ -220,7 +371,7 @@ class TablePlayerPanel extends StatelessWidget {
 
                 height:
 
-                    6,
+                    4,
 
               ),
 
@@ -228,7 +379,9 @@ class TablePlayerPanel extends StatelessWidget {
 
 
 
+
               InkDisplay(
+
 
 
                 available:
@@ -239,8 +392,11 @@ class TablePlayerPanel extends StatelessWidget {
 
                 total:
 
+
                     player.availableInk +
+
                     player.exertedInk,
+
 
 
               ),
@@ -248,10 +404,13 @@ class TablePlayerPanel extends StatelessWidget {
 
 
 
+
             ],
 
 
+
           ),
+
 
 
     );

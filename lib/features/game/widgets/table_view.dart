@@ -38,6 +38,7 @@ class TableView extends StatefulWidget {
 class _TableViewState extends State<TableView> {
 
 
+
   List<PlayerModel> get players =>
       widget.game.players;
 
@@ -54,11 +55,11 @@ class _TableViewState extends State<TableView> {
 
 
     final horizontal =
-        size.width * .20;
+        size.width * .16;
 
 
     final vertical =
-        size.height * .20;
+        size.height * .18;
 
 
 
@@ -113,8 +114,6 @@ class _TableViewState extends State<TableView> {
 
 
 
-
-
   Widget buildPlayerCard(
       PlayerModel player,
       Size size,
@@ -130,7 +129,7 @@ class _TableViewState extends State<TableView> {
 
 
 
-    final sidePlayer =
+    final bool sidePlayer =
         player.seat == PlayerSeat.left ||
         player.seat == PlayerSeat.right;
 
@@ -160,7 +159,7 @@ class _TableViewState extends State<TableView> {
 
                     : sidePlayer
 
-                        ? .78
+                        ? .62
 
                         : .90,
 
@@ -200,6 +199,7 @@ class _TableViewState extends State<TableView> {
 
                         onLoreChanged:
 
+
                             (amount) {
 
 
@@ -223,6 +223,8 @@ class _TableViewState extends State<TableView> {
 
 
 
+
+
                         onSpendInk:
 
 
@@ -233,6 +235,7 @@ class _TableViewState extends State<TableView> {
 
 
                                 player.exertInk(1);
+
 
 
                               });
@@ -254,6 +257,8 @@ class _TableViewState extends State<TableView> {
 
 
   }
+
+
 
 
 
@@ -333,6 +338,7 @@ class _TableViewState extends State<TableView> {
 
             builder:
 
+
                 (context, constraints) {
 
 
@@ -357,6 +363,7 @@ class _TableViewState extends State<TableView> {
                             player != activePlayer,
                       )
                       .toList();
+
 
 
 
@@ -387,6 +394,7 @@ class _TableViewState extends State<TableView> {
                           Colors.brown.shade900,
 
                     ),
+
 
 
 
@@ -444,24 +452,31 @@ class _TableViewState extends State<TableView> {
                                 boxShadow: [
 
 
+
                                   BoxShadow(
+
 
                                     blurRadius:
 
                                         30,
 
+
                                     spreadRadius:
 
                                         5,
+
 
                                     color:
 
                                         Colors.black26,
 
+
                                   ),
 
 
+
                                 ],
+
 
                               ),
 
@@ -472,11 +487,13 @@ class _TableViewState extends State<TableView> {
 
 
 
-                        // Other players first
+
+                        // Background players
 
                         ...inactivePlayers.map(
 
                           (player) {
+
 
                             return buildPlayerCard(
 
@@ -488,9 +505,11 @@ class _TableViewState extends State<TableView> {
 
                             );
 
+
                           },
 
                         ),
+
 
 
 
@@ -509,11 +528,15 @@ class _TableViewState extends State<TableView> {
                         ),
 
 
+
                       ],
+
 
                     ),
 
+
               );
+
 
             },
 
@@ -522,6 +545,7 @@ class _TableViewState extends State<TableView> {
 
 
     );
+
 
   }
 
