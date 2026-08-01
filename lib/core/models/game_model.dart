@@ -1,10 +1,10 @@
 import 'player_model.dart';
 import 'game_mode.dart';
+import 'turn_manager.dart';
 
 
 
 class GameModel {
-
 
   GameModel({
 
@@ -16,9 +16,9 @@ class GameModel {
 
     this.startingInk = 0,
 
-    this.currentPlayer = 0,
-
-  });
+  }) : turnManager = TurnManager(
+          playerCount: players.length,
+        );
 
 
 
@@ -38,24 +38,55 @@ class GameModel {
 
 
 
-  int currentPlayer;
+  final TurnManager turnManager;
 
 
 
   PlayerModel get activePlayer =>
-      players[currentPlayer];
+
+      players[
+        turnManager.currentPlayerIndex
+      ];
 
 
 
-  void nextTurn(){
+  int get currentPlayer =>
 
-    currentPlayer++;
+      turnManager.currentPlayerIndex;
 
-    if(currentPlayer >= players.length){
 
-      currentPlayer = 0;
 
-    }
+  int get currentRound =>
+
+      turnManager.currentRound;
+
+
+
+  int get currentTurn =>
+
+      turnManager.currentTurn;
+
+
+
+  void nextTurn() {
+
+    turnManager.nextTurn();
+
+  }
+
+
+
+  void previousTurn() {
+
+    turnManager.previousTurn();
+
+  }
+
+
+
+  void resetTurns() {
+
+    turnManager.reset();
 
   }
 

@@ -3,127 +3,242 @@ import 'package:flutter/material.dart';
 import '../theme/ink_colors.dart';
 
 
-class InkGem extends StatelessWidget {
+class InkGem extends StatefulWidget {
 
-  const InkGem({
+
+  InkGem({
+
     super.key,
-    required this.type,
-    this.size = 60,
+
+    Color? color,
+
+    InkType? type,
+
     this.selected = false,
-  });
+
+    this.exerted = false,
+
+    this.size = 28,
+
+  }) :
+
+    color = color ??
+        InkColors.colors[type]!;
 
 
-  final InkType type;
+
+  final Color color;
+
+  final bool selected;
+
+  final bool exerted;
 
   final double size;
 
-  final bool selected;
+
+
+  @override
+  State<InkGem> createState() =>
+      _InkGemState();
+
+
+}
+
+
+
+
+
+
+class _InkGemState extends State<InkGem>
+    with SingleTickerProviderStateMixin {
+
+
+  late AnimationController _controller;
+
+
+
+  @override
+  void initState() {
+
+    super.initState();
+
+
+    _controller =
+
+        AnimationController(
+
+          vsync:
+              this,
+
+          duration:
+
+              const Duration(
+                milliseconds: 900,
+              ),
+
+        );
+
+
+    _controller.repeat(
+      reverse: true,
+    );
+
+
+  }
+
+
+
 
 
   @override
   Widget build(BuildContext context) {
 
-    return AnimatedContainer(
 
-      duration:
-          const Duration(milliseconds: 250),
-
-      width: size,
-
-      height: size,
-
-      decoration: BoxDecoration(
-
-        shape: BoxShape.circle,
-
-        color:
-            InkColors.get(type),
-
-        border: Border.all(
-
-          color:
-              selected
-                  ? Colors.white
-                  : Colors.transparent,
-
-          width: 3,
-
-        ),
+    return AnimatedBuilder(
 
 
-        boxShadow:
+      animation:
+          _controller,
 
-            selected
 
-                ? [
 
-                    BoxShadow(
+      builder:
+          (context, child) {
+
+
+        final glow =
+
+            widget.selected
+
+                ? .55
+
+                : widget.exerted
+
+                    ? .10
+
+                    : .25 +
+                        (_controller.value * .15);
+
+
+
+        return Transform.rotate(
+
+
+          angle:
+
+              widget.exerted
+
+                  ? .35
+
+                  : 0,
+
+
+
+          child:
+
+              Container(
+
+
+                width:
+
+                    widget.size,
+
+
+                height:
+
+                    widget.size,
+
+
+
+                decoration:
+
+                    BoxDecoration(
+
+
+                      shape:
+
+                          BoxShape.circle,
+
+
 
                       color:
-                          InkColors.get(type)
-                          .withValues(alpha: .7),
 
-                      blurRadius: 18,
+                          widget.color,
 
-                      spreadRadius: 2,
+
+
+                      border:
+
+                          widget.selected
+
+                              ? Border.all(
+
+                                  color:
+                                      Colors.white,
+
+                                  width:
+                                      2,
+
+                                )
+
+                              : null,
+
+
+
+                      boxShadow: [
+
+
+                        BoxShadow(
+
+                          color:
+
+                              widget.color.withValues(
+
+                                alpha:
+                                    glow,
+
+                              ),
+
+
+                          blurRadius:
+                              12,
+
+
+                        ),
+
+
+                      ],
+
 
                     ),
 
-                  ]
-
-                : null,
-
-      ),
-
-
-      child: Center(
-
-        child: Text(
-
-          _symbol(type),
-
-          style:
-              TextStyle(
-
-                fontSize:
-                    size * .45,
 
               ),
 
-        ),
 
-      ),
+        );
+
+
+      },
+
 
     );
 
-  }
-
-
-
-  String _symbol(InkType type) {
-
-    switch(type){
-
-      case InkType.amber:
-        return "🟡";
-
-      case InkType.amethyst:
-        return "🟣";
-
-      case InkType.emerald:
-        return "🟢";
-
-      case InkType.ruby:
-        return "🔴";
-
-      case InkType.sapphire:
-        return "🔵";
-
-      case InkType.steel:
-        return "⚪";
-
-    }
 
   }
+
+
+
+
+
+  @override
+  void dispose() {
+
+    _controller.dispose();
+
+    super.dispose();
+
+  }
+
 
 }
